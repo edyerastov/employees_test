@@ -61,7 +61,7 @@ export class EmpoyeesListComponent implements OnDestroy, OnInit {
 
   getEmployees() {
     this.employees.getEmployees().then(employees => {
-      this.employeesSubject.next(employees.data.reverse());
+      this.employeesSubject.next(employees.reverse());
     })
   }
 
@@ -69,14 +69,19 @@ export class EmpoyeesListComponent implements OnDestroy, OnInit {
     this.employees.getEmployee(id).then(employee => {
       this.router.navigate(['employees', id]);
       let employeeArr = [];
-      employeeArr.push(employee.data);
+      employeeArr.push(employee);
       this.employeesSubject.next(employeeArr);
     })
   }
 
   async addEmployee() {
+    let formedData = {
+      "employee_name": this.newEmployee.value.name,
+      "employee_salary": this.newEmployee.value.salary,
+      "employee_age": this.newEmployee.value.age
+    }
     try {
-      await this.employees.addEmployee(JSON.stringify(this.newEmployee.value));
+      await this.employees.addEmployee(formedData);
       this.newEmployee.reset();
       this.modalRef.hide();
       this.getEmployees();
@@ -95,8 +100,13 @@ export class EmpoyeesListComponent implements OnDestroy, OnInit {
 
 
   async editEmployee() {
+    let formedData = {
+      "employee_name": this.newEmployee.value.name,
+      "employee_salary": this.newEmployee.value.salary,
+      "employee_age": this.newEmployee.value.age
+    }
     try {
-      await this.employees.editEmployee(this.employeeId, JSON.stringify(this.newEmployee.value))
+      await this.employees.editEmployee(this.employeeId, formedData)
       this.newEmployee.reset();
       this.modalRef.hide();
       this.editing = false;
