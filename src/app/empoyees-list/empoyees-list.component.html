@@ -1,0 +1,70 @@
+<div class="d-flex mt-3 mb-3 w-100 justify-content-between align-items-center">
+  <span routerLink="employees/" class="active-text" (click)="getEmployees()">See all</span>
+  <button class="btn btn-primary" (click)="openModal(template)">Add new employee</button>
+</div>
+
+<span *ngIf="!employeesSubject.getValue().length">No employees</span>
+
+<div *ngFor="let employee of employees$ | async" class="card w-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <span class="name mr-2">{{employee.employee_name}}</span>
+        <span class="active-text" (click)="getEmployee(employee.id)">({{employee.id}})</span>
+      </div>
+      <span class="age">Age: {{employee.employee_age}}</span>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <span class="salary">Salary: {{employee.employee_salary}}</span>
+      <button class="btn btn-primary ml-auto"
+              (click)="setDataToForm(employee.id, employee.employee_name, employee.employee_salary, employee.employee_age); openModal(template)">Edit</button>
+      <button class="btn btn-danger ml-2" (click)="deleteEmployee(employee.id)">Remove</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{editing ? 'Edit employee' : 'Add new employee'}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="newEmployee" novalidate>
+      <div class="form-row">
+        <div class="form-group col-4">
+          <label for="name">Name</label>
+          <input type="text"
+                 class="form-control"
+                 id="name"
+                 [ngClass]="{'border-danger': newEmployee.controls['name'].invalid && newEmployee.controls['name'].touched}"
+                 formControlName="name">
+        </div>
+        <div class="form-group col-4">
+          <label for="salary">Salary</label>
+          <input type="text"
+                 class="form-control"
+                 id="salary"
+                 [ngClass]="{'border-danger': newEmployee.controls['salary'].invalid && newEmployee.controls['salary'].touched}"
+                 formControlName="salary">
+        </div>
+        <div class="form-group col-4">
+          <label for="age">Age</label>
+          <input type="text"
+                 class="form-control"
+                 id="age"
+                 [ngClass]="{'border-danger': newEmployee.controls['age'].invalid && newEmployee.controls['age'].touched}"
+                 formControlName="age">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary ml-auto"
+            [disabled]="newEmployee.invalid"
+            (click)="editing ? editEmployee() : addEmployee()">{{editing ? 'Confirm' : 'Add'}}</button>
+  </div>
+</ng-template>
+
+

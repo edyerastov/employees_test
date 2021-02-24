@@ -1,0 +1,25 @@
+.card {
+  .name{
+    font-size: 24px;
+  }
+
+  .btn{
+    width: 100px;
+  }
+
+  & + .card {
+    margin-top: 30px;
+  }
+}
+
+.active-text{
+  color: #545454;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover{
+    color: #000;
+  }
+
+}
+
