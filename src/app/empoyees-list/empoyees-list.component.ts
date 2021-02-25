@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { EmployesService } from "../services/employes.service";
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination'
 import { Employee } from "../models/employee";
 import { takeUntil } from 'rxjs/operators';
 
@@ -16,7 +17,10 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class EmpoyeesListComponent implements OnDestroy, OnInit {
   public employeesSubject: BehaviorSubject<Employee[]> = new BehaviorSubject<Employee[]>([]);
-  public employees$: Observable<Employee[]> = this.employeesSubject.asObservable();
+
+  public employeesReturnedSubject: BehaviorSubject<Employee[]> = new BehaviorSubject<Employee[]>([]);
+  public employeesReturned$: Observable<Employee[]> = this.employeesReturnedSubject.asObservable();
+
   public newEmployee: FormGroup;
   public modalRef!: BsModalRef;
   public editing: boolean = false;
@@ -62,6 +66,11 @@ export class EmpoyeesListComponent implements OnDestroy, OnInit {
   getEmployees() {
     this.employees.getEmployees().then(employees => {
       this.employeesSubject.next(employees.reverse());
+      if (employees.length > 10) {
+        this.employeesReturnedSubject.next(this.employeesSubject.getValue().slice(0, 10))
+      } else {
+        this.employeesReturnedSubject.next(employees.reverse())
+      }
     })
   }
 
@@ -123,6 +132,12 @@ export class EmpoyeesListComponent implements OnDestroy, OnInit {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  pageChanged(event: PageChangedEvent): void {
+    const startItem = (event.page - 1) * event.itemsPerPage;
+    const endItem = event.page * event.itemsPerPage;
+    this.employeesReturnedSubject.next(this.employeesSubject.getValue().slice(startItem, endItem));
   }
 
 }

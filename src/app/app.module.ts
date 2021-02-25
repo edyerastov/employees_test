@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from "@angular/common/http";
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ReactiveFormsModule } from "@angular/forms";
 import { Routes, RouterModule } from '@angular/router';
 
@@ -24,7 +25,8 @@ const appRoutes: Routes =[
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     ModalModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PaginationModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
