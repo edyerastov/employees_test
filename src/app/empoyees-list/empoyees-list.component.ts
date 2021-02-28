@@ -79,7 +79,7 @@ export class EmpoyeesListComponent implements OnDestroy, OnInit {
       this.router.navigate(['employees', id]);
       let employeeArr = [];
       employeeArr.push(employee);
-      this.employeesSubject.next(employeeArr);
+      this.employeesReturnedSubject.next(employeeArr);
     })
   }
 

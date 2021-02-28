@@ -3,7 +3,7 @@
   <button class="btn btn-primary" (click)="openModal(template)">Add new employee</button>
 </div>
 
-<span *ngIf="!employeesSubject.getValue().length">No employees</span>
+<span *ngIf="!employeesReturnedSubject.getValue().length">No employees</span>
 
 <div *ngFor="let employee of employeesReturned$ | async" class="card w-100">
   <div class="card-body">
